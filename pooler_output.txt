@@ -1,0 +1,6 @@
+Testing connection to aws-0-ap-south-1.pooler.supabase.com...
+❌ Connection failed: connection to server at "aws-0-ap-south-1.pooler.supabase.com" (3.108.251.216), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+connection to server at "aws-0-ap-south-1.pooler.supabase.com" (3.111.105.85), port 5432 failed: Connection refused
+	Is the server running on that host and accepting TCP/IP connections?
+

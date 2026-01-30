@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Dashboard | Secure Certs</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+  <div class="container dashboard-container">
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2 style="margin: 0; text-align: left;">Dashboard</h2>
+        <a href="/"
+          style="margin: 0; background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 8px;">Logout</a>
+      </div>
+
+      <p class="role-badge">Role: {{ role | upper }}</p>
+
+      {% if role == "admin" %}
+      <div style="margin-top: 2rem;">
+        <h3>Pending Requests</h3>
+        <ul>
+          {% for req in pending_requests %}
+          <li>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong>{{ req[1] }}</strong> wants: <br>
+                <span style="color: var(--text-secondary);">{{ req[2] }}</span>
+              </div>
+              <form method="post" action="/approve_request/{{ req[0] }}" style="width: auto;">
+                <button type="submit" style="margin: 0; padding: 0.5rem 1rem; width: auto; font-size: 0.9rem;">Approve &
+                  Issue</button>
+              </form>
+            </div>
+          </li>
+          {% else %}
+          <li style="text-align: center; color: var(--text-secondary);">No pending requests.</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div style="margin-top: 2rem;">
+        <h3>Issue Manually</h3>
+        <form method="post" action="/issue">
+          <div>
+            <label>Certificate Content</label>
+            <input name="text" placeholder="e.g. Course Completion 2024" required>
+          </div>
+          <div>
+            <label>Recipient Student</label>
+            <select name="student_username" required>
+              <option value="" disabled selected>Select Student</option>
+              {% for student in students %}
+              <option value="{{ student }}">{{ student }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit">Issue Securely</button>
+        </form>
+      </div>
+      {% endif %}
+
+      {% if role == "student" %}
+      <div style="margin-top: 2rem;">
+        <h3>Request Certificate</h3>
+        <form method="post" action="/request_certificate">
+          <div>
+            <label>Reason / Details</label>
+            <input name="details" placeholder="e.g. Bonafide for Internship" required>
+          </div>
+          <button type="submit">Submit Request</button>
+        </form>
+      </div>
+
+      <div style="margin-top: 2rem;">
+        <h3>My Requests</h3>
+        <ul>
+          {% for req in my_requests %}
+          <li>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span>{{ req[0] }}</span>
+              {% if req[1] == 'approved' %}
+              <span
+                style="color: var(--success); font-weight: bold; background: rgba(16, 185, 129, 0.1); padding: 2px 8px; border-radius: 4px;">APPROVED</span>
+              {% else %}
+              <span
+                style="color: #fbbf24; font-weight: bold; background: rgba(251, 191, 36, 0.1); padding: 2px 8px; border-radius: 4px;">PENDING</span>
+              {% endif %}
+            </div>
+            <small>{{ req[2] }}</small>
+          </li>
+          {% else %}
+          <li style="text-align: center; color: var(--text-secondary);">No requests made.</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div style="margin-top: 2rem;">
+        <h3>My Certificates</h3>
+        <ul>
+          {% for cert in my_certs %}
+          <li>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+              <strong>Certificate #{{ cert[0] }}</strong>
+              <span style="color: var(--text-secondary); font-size: 0.85rem;">{{ cert[1] }}</span>
+              <!-- Student can verify their own certificate too -->
+              <a href="/verify/{{ cert[0] }}"
+                style="background: rgba(255,255,255,0.1); padding: 2px 8px; font-size: 0.8rem; border-radius: 4px; margin: 0;">Check</a>
+            </div>
+            <small>Signature: {{ cert[4][:50] }}...</small>
+          </li>
+          {% else %}
+          <li style="text-align: center; color: var(--text-secondary);">No certificates found.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      {% if role == "verifier" %}
+      <div style="margin-top: 2rem;">
+        <h3>All Issued Certificates (Public Ledger)</h3>
+        <ul>
+          {% for cert in all_certs %}
+          <li>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong>#{{ cert[0] }} to {{ cert[1] }}</strong> <br>
+                <small>{{ cert[2] }}</small>
+              </div>
+              <a href="/verify/{{ cert[0] }}"
+                style="background: var(--primary); color: white; padding: 0.5rem 1rem; border-radius: 6px; margin: 0; font-size: 0.9rem;">Verify</a>
+            </div>
+            <small style="margin-top: 0.5rem; display: block;">Sig: {{ cert[3][:30] }}...</small>
+          </li>
+          {% else %}
+          <li style="text-align: center; color: var(--text-secondary);">No certificates in ledger.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+
+      {% if role == "verifier" or role == "admin" %}
+      <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+        <a href="/verify"
+          style="background: rgba(255, 255, 255, 0.1); color: var(--text-secondary); padding: 1rem; border-radius: 8px; margin-top: 0;">Verify
+          Last Issued (Session)</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</body>
+
+</html>

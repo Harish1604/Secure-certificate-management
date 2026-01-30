@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Verify OTP | Secure Certs</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Two-Factor Auth</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1rem; text-align: center;">An OTP has been sent to
+                your device.</p>
+            {% if otp_debug %}
+            <div class="alert alert-error"
+                style="color: #818cf8; background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.2);">
+                DEBUG OTP: {{ otp_debug }}
+            </div>
+            {% endif %}
+            <form method="post" action="/otp-verify">
+                <div>
+                    <label>Enter Code</label>
+                    <input name="otp" placeholder="6-digit code" required
+                        style="letter-spacing: 4px; text-align: center; font-size: 1.2rem;">
+                </div>
+                <button type="submit">Verify Identity</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

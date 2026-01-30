@@ -1,0 +1,88 @@
+nohup: ignoring input
+Loading existing keys...
+ * Serving Flask app 'app'
+ * Debug mode: on
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 108-837-038
+127.0.0.1 - - [28/Jan/2026 17:54:29] "[35m[1mGET /verify/1 HTTP/1.1[0m" 500 -
+Traceback (most recent call last):
+  File "/home/harish/.local/lib/python3.14/site-packages/flask/app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/harish/.local/lib/python3.14/site-packages/flask/app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+  File "/home/harish/.local/lib/python3.14/site-packages/flask/app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "/home/harish/.local/lib/python3.14/site-packages/flask/app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "/home/harish/.local/lib/python3.14/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/home/harish/.local/lib/python3.14/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/home/harish/Desktop/Sem_VI/FOCYS/secure_certificate_system/app.py", line 308, in verify
+    valid, data = verify_certificate(
+    
+  File "/home/harish/Desktop/Sem_VI/FOCYS/secure_certificate_system/certificates/verify.py", line 14, in verify_certificate
+    aes_key = rsa_decrypt(enc_key, admin_private_key)
+  File "/home/harish/Desktop/Sem_VI/FOCYS/secure_certificate_system/crypto/encryption.py", line 39, in rsa_decrypt
+    return private_key.decrypt(
+    
+ValueError: Decryption failed
+127.0.0.1 - - [28/Jan/2026 17:54:29] "[36mGET /verify/1?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:54:29] "[36mGET /verify/1?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:54:29] "GET /verify/1?__debugger__=yes&cmd=resource&f=console.png&s=TayKrQqoG6GcgOniSHdb HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:55:32] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:55:32] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:55:44] "[32mPOST /login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [28/Jan/2026 17:55:44] "GET /otp-verify HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:55:44] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:55:52] "[32mPOST /otp-verify HTTP/1.1[0m" 302 -
+127.0.0.1 - - [28/Jan/2026 17:55:52] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:55:52] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:56:03] "[32mPOST /request_certificate HTTP/1.1[0m" 302 -
+127.0.0.1 - - [28/Jan/2026 17:56:03] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:56:03] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:56:07] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:56:07] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:56:09] "[32mPOST /login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [28/Jan/2026 17:56:09] "GET /otp-verify HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:56:09] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:56:17] "POST /otp-verify HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:56:21] "GET /otp-verify HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:56:28] "[32mPOST /otp-verify HTTP/1.1[0m" 302 -
+127.0.0.1 - - [28/Jan/2026 17:56:28] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:56:28] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:56:34] "[32mPOST /approve_request/2 HTTP/1.1[0m" 302 -
+127.0.0.1 - - [28/Jan/2026 17:56:34] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:56:34] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:56:50] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:56:50] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:56:54] "[32mPOST /login HTTP/1.1[0m" 302 -
+127.0.0.1 - - [28/Jan/2026 17:56:54] "GET /otp-verify HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:56:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:57:02] "[32mPOST /otp-verify HTTP/1.1[0m" 302 -
+127.0.0.1 - - [28/Jan/2026 17:57:02] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:57:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:57:09] "GET /verify/3 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:57:09] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:57:25] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:57:25] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:57:28] "GET /verify HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:57:28] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:57:30] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:57:30] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 17:58:20] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 17:58:20] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 18:08:31] "GET /verify/3 HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 18:08:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 18:08:46] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 18:08:46] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+127.0.0.1 - - [28/Jan/2026 18:08:49] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [28/Jan/2026 18:08:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+/usr/lib64/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-_pdliyze'}
+  warnings.warn(

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login | Secure Certs</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <h2>Secure Login</h2>
+            {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+            {% endif %}
+            <form method="post" action="/login">
+                <div>
+                    <label>Username</label>
+                    <input name="username" placeholder="Enter your username" required>
+                </div>
+                <div>
+                    <label>Password</label>
+                    <input type="password" name="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit">Sign In</button>
+            </form>
+            <a href="/register">Create New Account</a>
+        </div>
+    </div>
+</body>
+
+</html>

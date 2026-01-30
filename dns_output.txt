@@ -1,0 +1,5 @@
+Resolving db.vxujirewmluukjtwvvqo.supabase.co...
+ - IPv6: ('2406:da1a:6b0:f61f:f6f4:d280:13e6:6a4', 5432, 0, 0)
+ - IPv6: ('2406:da1a:6b0:f61f:f6f4:d280:13e6:6a4', 5432, 0, 0)
+ - IPv6: ('2406:da1a:6b0:f61f:f6f4:d280:13e6:6a4', 5432, 0, 0)
+Error in gethostbyname: [Errno -5] No address associated with hostname

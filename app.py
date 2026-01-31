@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 from auth.login import login_user
 from auth.register import register_user
-from auth.otp import generate_otp
+from auth.otp import generate_totp_secret, get_totp_uri, generate_qr_code, verify_totp
 from access_control.acl import has_permission
 from crypto.encryption import generate_rsa_keys
 from certificates.issue import issue_certificate
@@ -108,7 +108,9 @@ def register():
         role = request.form["role"]
         
         try:
-            register_user(username, password, role)
+            totp_secret = register_user(username, password, role)
+            # User said "not registering", so we skip the setup screen here
+            # and let them set it up during first login (auto-migration).
             return redirect("/")
         except sqlite3.IntegrityError:
             return "Username already exists ❌"
@@ -120,11 +122,20 @@ def login():
     username = request.form["username"]
     password = request.form["password"]
 
-    success, role = login_user(username, password)
+    success, role, totp_secret = login_user(username, password)
     if success:
-        session["temp_user"] = {"username": username, "role": role}
-        session["otp"] = generate_otp()
-        print(f"DEBUG: OTP for {username} is {session['otp']}")  # Print OTP to console
+        # Auto-migration: If existing user has no secret, generate one now
+        if not totp_secret:
+            totp_secret = generate_totp_secret()
+            with sqlite3.connect("database.db", timeout=30) as conn:
+                conn.execute("UPDATE users SET totp_secret=? WHERE username=?", (totp_secret, username))
+                conn.commit()
+
+        session["temp_user"] = {
+            "username": username, 
+            "role": role,
+            "totp_secret": totp_secret
+        }
         return redirect("/otp-verify")
     return render_template("login.html", error="Invalid credentials ❌")
 
@@ -135,16 +146,32 @@ def otp_verify():
 
     if request.method == "POST":
         user_otp = request.form["otp"]
-        if user_otp == session.get("otp"):
-            user_data = session.pop("temp_user")
-            session.pop("otp")
+        user_data = session.get("temp_user")
+        secret = user_data.get("totp_secret")
+        
+        # Handle case where existing users might not have a secret (migration fallback)
+        if not secret:
+             # In a real app, force setup. Here, just fail or let them in if we wanted to be insecure (but we won't).
+             return "2FA not set up for this user. Please contact admin. ❌"
+
+        if verify_totp(secret, user_otp):
+            session.pop("temp_user")
             session["username"] = user_data["username"]
             session["role"] = user_data["role"]
             return redirect("/dashboard")
-        return "Invalid OTP ❌"
+        return "Invalid Code ❌"
 
-    otp_debug = session.get("otp") if "otp" in session else None
-    return render_template("otp.html", otp_debug=otp_debug)
+    # GET request - Show form (and QR code for demo convenience)
+    user_data = session.get("temp_user")
+    username = user_data.get("username")
+    secret = user_data.get("totp_secret")
+    
+    qr_code = None
+    if secret:
+        uri = get_totp_uri(username, secret)
+        qr_code = generate_qr_code(uri)
+
+    return render_template("otp.html", qr_code=qr_code)
 
 @app.route("/dashboard")
 def dashboard():

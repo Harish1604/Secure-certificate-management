@@ -10,19 +10,29 @@
     <div class="container">
         <div class="card">
             <h2>Two-Factor Auth</h2>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem; text-align: center;">An OTP has been sent to
-                your device.</p>
+            <p style="color: var(--text-muted); margin-bottom: 2rem; text-align: center;">
+                Enter the code from your Google Authenticator App.
+            </p>
+
+            {% if qr_code %}
+            <div
+                style="background: white; padding: 1rem; border-radius: 12px; display: block; margin: 0 auto 2rem; width: fit-content; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                <p style="color: #333; font-size: 0.8rem; margin-bottom: 0.5rem; text-align: center; font-weight: 600;">
+                    Scan to Setup (Demo)</p>
+                <img src="{{ qr_code }}" alt="QR Code" style="width: 150px; height: 150px; display: block;">
+            </div>
+            {% endif %}
             {% if otp_debug %}
             <div class="alert alert-error"
-                style="color: #818cf8; background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.2);">
+                style="background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3); color: #a5b4fc;">
                 DEBUG OTP: {{ otp_debug }}
             </div>
             {% endif %}
             <form method="post" action="/otp-verify">
-                <div>
-                    <label>Enter Code</label>
-                    <input name="otp" placeholder="6-digit code" required
-                        style="letter-spacing: 4px; text-align: center; font-size: 1.2rem;">
+                <div class="input-group">
+                    <label style="text-align: center;">Enter Code</label>
+                    <input name="otp" placeholder="Enter 6-digit code" required
+                        style="letter-spacing: 0.5rem; text-align: center; font-size: 1.5rem; font-weight: 700;">
                 </div>
                 <button type="submit">Verify Identity</button>
             </form>

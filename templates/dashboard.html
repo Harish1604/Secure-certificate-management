@@ -9,45 +9,55 @@
 <body>
   <div class="container dashboard-container">
     <div class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-        <h2 style="margin: 0; text-align: left;">Dashboard</h2>
+      <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem;">
+        <h2
+          style="margin: 0; font-size: 1.8rem; background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+          Dashboard</h2>
         <a href="/"
-          style="margin: 0; background: rgba(255,255,255,0.1); padding: 0.5rem 1rem; border-radius: 8px;">Logout</a>
+          style="margin: 0; background: rgba(255,255,255,0.05); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.85rem; transition: background 0.2s;">Logout</a>
       </div>
 
-      <p class="role-badge">Role: {{ role | upper }}</p>
+      <div style="text-align: center;">
+        <span class="role-badge">
+          Role: {{ role | upper }}
+        </span>
+      </div>
 
       {% if role == "admin" %}
-      <div style="margin-top: 2rem;">
+      <div style="margin-top: 1rem;">
         <h3>Pending Requests</h3>
         <ul>
           {% for req in pending_requests %}
           <li>
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <div>
-                <strong>{{ req[1] }}</strong> wants: <br>
-                <span style="color: var(--text-secondary);">{{ req[2] }}</span>
+                <strong style="color: var(--text-main); font-size: 1.1rem;">{{ req[1] }}</strong>
+                <p style="color: var(--text-muted); margin-top: 0.25rem;">{{ req[2] }}</p>
+                <small>{{ req[3] }}</small>
               </div>
-              <form method="post" action="/approve_request/{{ req[0] }}" style="width: auto;">
-                <button type="submit" style="margin: 0; padding: 0.5rem 1rem; width: auto; font-size: 0.9rem;">Approve &
-                  Issue</button>
+              <form method="post" action="/approve_request/{{ req[0] }}" style="width: auto; margin:0;">
+                <button type="submit"
+                  style="margin: 0; padding: 0.5rem 1.25rem; width: auto; font-size: 0.9rem; background: linear-gradient(135deg, var(--success), #059669);">Approve</button>
               </form>
             </div>
           </li>
           {% else %}
-          <li style="text-align: center; color: var(--text-secondary);">No pending requests.</li>
+          <li style="text-align: center; color: var(--text-muted); background: transparent; border: none;">No pending
+            requests.</li>
           {% endfor %}
         </ul>
       </div>
 
-      <div style="margin-top: 2rem;">
+      <div style="margin-top: 3rem;">
         <h3>Issue Manually</h3>
-        <form method="post" action="/issue">
-          <div>
+        <form method="post" action="/issue"
+          style="background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--glass-border);">
+          <div class="input-group">
             <label>Certificate Content</label>
             <input name="text" placeholder="e.g. Course Completion 2024" required>
           </div>
-          <div>
+          <div class="input-group">
             <label>Recipient Student</label>
             <select name="student_username" required>
               <option value="" disabled selected>Select Student</option>
@@ -62,10 +72,11 @@
       {% endif %}
 
       {% if role == "student" %}
-      <div style="margin-top: 2rem;">
+      <div style="margin-top: 1rem;">
         <h3>Request Certificate</h3>
-        <form method="post" action="/request_certificate">
-          <div>
+        <form method="post" action="/request_certificate"
+          style="background: rgba(255,255,255,0.02); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--glass-border);">
+          <div class="input-group">
             <label>Reason / Details</label>
             <input name="details" placeholder="e.g. Bonafide for Internship" required>
           </div>
@@ -73,76 +84,89 @@
         </form>
       </div>
 
-      <div style="margin-top: 2rem;">
+      <div style="margin-top: 3rem;">
         <h3>My Requests</h3>
         <ul>
           {% for req in my_requests %}
           <li>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <span>{{ req[0] }}</span>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <span style="font-weight: 600; color: var(--text-main);">{{ req[0] }}</span>
+                <small>{{ req[2] }}</small>
+              </div>
               {% if req[1] == 'approved' %}
-              <span
-                style="color: var(--success); font-weight: bold; background: rgba(16, 185, 129, 0.1); padding: 2px 8px; border-radius: 4px;">APPROVED</span>
+              <span class="status-badge status-approved">APPROVED</span>
               {% else %}
-              <span
-                style="color: #fbbf24; font-weight: bold; background: rgba(251, 191, 36, 0.1); padding: 2px 8px; border-radius: 4px;">PENDING</span>
+              <span class="status-badge status-pending">PENDING</span>
               {% endif %}
             </div>
-            <small>{{ req[2] }}</small>
           </li>
           {% else %}
-          <li style="text-align: center; color: var(--text-secondary);">No requests made.</li>
+          <li style="text-align: center; color: var(--text-muted); background: transparent; border: none;">No requests
+            made.</li>
           {% endfor %}
         </ul>
       </div>
 
-      <div style="margin-top: 2rem;">
+      <div style="margin-top: 3rem;">
         <h3>My Certificates</h3>
         <ul>
           {% for cert in my_certs %}
           <li>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-              <strong>Certificate #{{ cert[0] }}</strong>
-              <span style="color: var(--text-secondary); font-size: 0.85rem;">{{ cert[1] }}</span>
-              <!-- Student can verify their own certificate too -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+              <div>
+                <strong style="color: var(--primary); font-size: 1.1rem;">Certificate #{{ cert[0] }}</strong>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">Issued: {{ cert[1] }}</p>
+              </div>
               <a href="/verify/{{ cert[0] }}"
-                style="background: rgba(255,255,255,0.1); padding: 2px 8px; font-size: 0.8rem; border-radius: 4px; margin: 0;">Check</a>
+                style="background: rgba(99, 102, 241, 0.2); color: #a5b4fc; padding: 0.4rem 1rem; border-radius: 8px; font-size: 0.85rem; margin: 0; border: 1px solid rgba(99, 102, 241, 0.3);">View
+                Detail</a>
             </div>
-            <small>Signature: {{ cert[4][:50] }}...</small>
+            <div style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 8px; margin-top: 0.75rem;">
+              <code
+                style="display: block; font-family: monospace; font-size: 0.75rem; color: var(--text-muted); word-break: break-all;">
+                    Sig: {{ cert[4][:60] }}...
+                </code>
+            </div>
           </li>
           {% else %}
-          <li style="text-align: center; color: var(--text-secondary);">No certificates found.</li>
+          <li style="text-align: center; color: var(--text-muted); background: transparent; border: none;">No
+            certificates found.</li>
           {% endfor %}
         </ul>
       </div>
       {% endif %}
+
       {% if role == "verifier" %}
-      <div style="margin-top: 2rem;">
-        <h3>All Issued Certificates (Public Ledger)</h3>
+      <div style="margin-top: 1rem;">
+        <h3>Public Ledger</h3>
         <ul>
           {% for cert in all_certs %}
           <li>
             <div style="display: flex; justify-content: space-between; align-items: center;">
               <div>
-                <strong>#{{ cert[0] }} to {{ cert[1] }}</strong> <br>
+                <strong style="font-size: 1.1rem; color: var(--text-main);">#{{ cert[0] }}</strong> <span
+                  style="color: var(--text-muted);">issued to</span> <strong style="color: var(--primary);">{{ cert[1]
+                  }}</strong>
                 <small>{{ cert[2] }}</small>
               </div>
               <a href="/verify/{{ cert[0] }}"
-                style="background: var(--primary); color: white; padding: 0.5rem 1rem; border-radius: 6px; margin: 0; font-size: 0.9rem;">Verify</a>
+                style="background: var(--primary); color: white; padding: 0.5rem 1.25rem; border-radius: 8px; margin: 0; font-size: 0.9rem;">Verify</a>
             </div>
-            <small style="margin-top: 0.5rem; display: block;">Sig: {{ cert[3][:30] }}...</small>
+            <small style="margin-top: 0.75rem; font-family: monospace; opacity: 0.5;">Sig: {{ cert[3][:40] }}...</small>
           </li>
           {% else %}
-          <li style="text-align: center; color: var(--text-secondary);">No certificates in ledger.</li>
+          <li style="text-align: center; color: var(--text-muted); background: transparent; border: none;">No
+            certificates in ledger.</li>
           {% endfor %}
         </ul>
       </div>
       {% endif %}
 
       {% if role == "verifier" or role == "admin" %}
-      <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--glass-border);">
+      <div style="margin-top: 3rem; text-align: center;">
         <a href="/verify"
-          style="background: rgba(255, 255, 255, 0.1); color: var(--text-secondary); padding: 1rem; border-radius: 8px; margin-top: 0;">Verify
+          style="display: inline-block; background: rgba(255, 255, 255, 0.05); color: var(--text-muted); padding: 1rem 2rem; border-radius: 12px; border: 1px solid var(--glass-border);">Verify
           Last Issued (Session)</a>
       </div>
       {% endif %}

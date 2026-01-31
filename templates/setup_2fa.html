@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Setup 2FA | Secure Certs</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card" style="text-align: center;">
+            <h2>Setup Authenticator</h2>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                Scan this QR code with your Google Authenticator app.
+            </p>
+
+            <!-- White background container for QR code visibility -->
+            <div
+                style="background: white; padding: 1.5rem; border-radius: 16px; display: inline-block; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);">
+                <img src="{{ qr_code }}" alt="QR Code" style="width: 200px; height: 200px; display: block;">
+            </div>
+
+            <div
+                style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem; border: 1px solid var(--glass-border);">
+                <p
+                    style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">
+                    Manual Entry Code</p>
+                <code
+                    style="font-family: monospace; font-size: 1.5rem; color: var(--primary); letter-spacing: 2px; font-weight: 700;">{{ secret }}</code>
+            </div>
+
+            <a href="/" class="button"
+                style="text-decoration: none; display: block; width: 100%; box-sizing: border-box; background: linear-gradient(135deg, var(--primary), #4f46e5); color: white; padding: 1rem; border-radius: 12px; font-weight: 600; margin-top: 0;">Continue
+                to Login</a>
+        </div>
+    </div>
+</body>
+
+</html>

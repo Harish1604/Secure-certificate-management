@@ -9,3 +9,4 @@ def hash_password(password: str):
 
 def verify_password(password: str, stored_hash: str, salt: bytes):
     return hashlib.sha256(password.encode() + salt).hexdigest() == stored_hash
+

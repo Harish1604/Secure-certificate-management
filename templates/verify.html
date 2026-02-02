@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Certificate{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <h1>Certificate Verification</h1>
+
+    <form method="POST" action="{{ url_for('verify') }}">
+        <div class="form-group">
+            <label for="certificate_id">Certificate ID</label>
+            <input type="number" id="certificate_id" name="certificate_id" placeholder="Enter certificate ID to verify"
+                required>
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Verify Certificate</button>
+    </form>
+</div>
+
+{% if result %}
+<div class="card"
+    style="max-width: 800px; margin: 0 auto; border-left: 4px solid {{ 'var(--success)' if result.valid else 'var(--danger)' }};">
+    <h2 style="color: {{ 'var(--success)' if result.valid else 'var(--danger)' }};">
+        {% if result.valid %}
+        VALID CERTIFICATE
+        {% else %}
+        TAMPERED CERTIFICATE
+        {% endif %}
+    </h2>
+
+    <p style="margin-bottom: 8px;">
+        <strong>Certificate ID:</strong> #{{ certificate_id }}
+    </p>
+
+    <p style="margin-bottom: 20px;">
+        <strong>Status:</strong> {{ result.message }}
+    </p>
+
+    {% if result.valid %}
+    <div style="margin-top: 20px;">
+        <a href="{{ url_for('download_certificate', certificate_id=certificate_id) }}" class="btn btn-success">
+            Download Decrypted Certificate
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+{% if result.crypto_details %}
+<div class="card" style="max-width: 800px; margin: 0 auto;">
+    <h2>Cryptographic Details</h2>
+    <p style="margin-bottom: 20px; color: var(--text-secondary);">
+        Below are the cryptographic components used in this certificate's security.
+    </p>
+
+    <div class="grid grid-2">
+        <div class="info-box warning-box">
+            <strong>AES Encryption Key (Hex)</strong>
+            <p style="font-family: monospace; font-size: 12px; word-break: break-all; margin-top: 10px;">
+                {{ result.crypto_details.aes_key_hex }}
+            </p>
+        </div>
+
+        <div class="info-box">
+            <strong>Encrypted AES Key (Base64)</strong>
+            <p style="font-family: monospace; font-size: 12px; word-break: break-all; margin-top: 10px;">
+                {{ result.crypto_details.encrypted_key_b64[:100] }}...
+            </p>
+        </div>
+
+        <div class="info-box">
+            <strong>Digital Signature (Base64)</strong>
+            <p style="font-family: monospace; font-size: 12px; word-break: break-all; margin-top: 10px;">
+                {{ result.crypto_details.signature_b64[:100] }}...
+            </p>
+        </div>
+
+        <div class="info-box">
+            <strong>SHA-256 File Hash</strong>
+            <p style="font-family: monospace; font-size: 12px; word-break: break-all; margin-top: 10px;">
+                {{ result.crypto_details.stored_hash }}
+            </p>
+            {% if result.crypto_details.calculated_hash == result.crypto_details.stored_hash %}
+            <span class="security-badge valid" style="margin-top: 10px;">Hash Match ✓</span>
+            {% else %}
+            <span class="security-badge tampered" style="margin-top: 10px;">Hash Mismatch ✗</span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="info-box" style="max-width: 800px; margin: 20px auto;">
+    <h3>Verification Steps Performed</h3>
+    <ol>
+        <li>Decrypted AES key using RSA private key</li>
+        <li>Decrypted certificate file using AES key</li>
+        <li>Recalculated SHA-256 hash of encrypted file</li>
+        <li>Verified digital signature using RSA public key</li>
+        <li>Compared calculated hash with stored hash</li>
+    </ol>
+</div>
+
+{% else %}
+
+<div class="info-box" style="max-width: 800px; margin: 20px auto;">
+    <h3>How Verification Works</h3>
+    <p style="margin-bottom: 15px;">
+        The verification process ensures that the certificate has not been tampered with and was issued by a
+        legitimate authority.
+    </p>
+    <ul style="line-height: 2;">
+        <li><strong>Decryption:</strong> RSA private key decrypts the AES key, which then decrypts the certificate
+        </li>
+        <li><strong>Hash Verification:</strong> SHA-256 hash is recalculated and compared with the stored hash</li>
+        <li><strong>Signature Verification:</strong> RSA public key verifies the digital signature</li>
+        <li><strong>Result:</strong> Certificate is marked as VALID or TAMPERED</li>
+    </ul>
+</div>
+
+{% endif %}
+
+<div style="max-width: 800px; margin: 20px auto;">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+{% endblock %}

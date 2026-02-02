@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Certificate{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 700px; margin: 0 auto;">
+    <h1>Upload & Encrypt Certificate</h1>
+
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
+        <h3 style="margin-bottom: 10px;">Request Details</h3>
+        <p><strong>Request ID:</strong> #{{ request.id }}</p>
+        <p><strong>Student:</strong> {{ request.student }}</p>
+        <p><strong>Certificate Type:</strong> {{ request.certificate_type }}</p>
+        <p><strong>Status:</strong> <span class="security-badge valid">{{ request.status }}</span></p>
+    </div>
+
+    <form method="POST" action="{{ url_for('upload_certificate', request_id=request.id) }}"
+        enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="certificate_file">Upload Certificate (PDF)</label>
+            <input type="file" id="certificate_file" name="certificate_file" accept=".pdf" required>
+        </div>
+
+        <div class="info-box warning-box">
+            <strong>Security Process</strong>
+            <ol>
+                <li><strong>AES Encryption:</strong> Certificate will be encrypted with random 256-bit AES key</li>
+                <li><strong>RSA Key Exchange:</strong> AES key will be encrypted with RSA public key</li>
+                <li><strong>SHA-256 Hashing:</strong> Encrypted file will be hashed</li>
+                <li><strong>Digital Signature:</strong> Hash will be signed with RSA private key</li>
+                <li><strong>Base64 Encoding:</strong> Keys and signatures will be encoded for storage</li>
+            </ol>
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Encrypt & Issue Certificate</button>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary"
+            style="width: 100%; margin-top: 10px; text-align: center;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

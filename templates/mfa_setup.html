@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}MFA Setup{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 40px auto; text-align: center;">
+    <h1>Setup MFA</h1>
+    <p style="margin-bottom: 20px;">
+        To secure your account, please set up two-factor authentication using Google Authenticator or any TOTP app.
+    </p>
+
+    <div class="info-box" style="margin-bottom: 30px; background: white; padding: 20px; display: inline-block;">
+        <img src="{{ qr_code }}" alt="MFA QR Code" style="width: 200px; height: 200px;">
+    </div>
+
+    <p style="margin-bottom: 20px; font-size: 14px;">
+        Can't scan the code? Enter this secret manually:<br>
+        <code
+            style="background: var(--input-bg); padding: 4px 8px; border-radius: 4px; color: var(--accent);">{{ secret }}</code>
+    </p>
+
+    <form method="POST" action="{{ url_for('setup_mfa_verify') }}">
+        <div class="form-group">
+            <label for="code">Enter Verification Code</label>
+            <input type="text" id="code" name="code" placeholder="Enter 6-digit code" required
+                style="text-align: center; font-size: 18px; letter-spacing: 2px;" autocomplete="off">
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Verify & Enable MFA</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Secure Certificate System{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 500px; margin: 50px auto;">
+    <h1 style="text-align: center; color: #667eea;">Login</h1>
+
+    {% if step == 1 %}
+    <p style="text-align: center; color: #666; margin-bottom: 30px;">
+        Step 1 of 2: Enter your credentials
+    </p>
+
+    <form method="POST" action="{{ url_for('login') }}">
+        <input type="hidden" name="step" value="1">
+
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Continue to OTP</button>
+    </form>
+
+    <p style="text-align: center; margin-top: 20px; color: #666;">
+        Don't have an account? <a href="{{ url_for('register') }}" style="color: #667eea;">Register here</a>
+    </p>
+
+    {% elif step == 2 %}
+    <p style="text-align: center; color: #666; margin-bottom: 30px;">
+        Step 2 of 2: Enter OTP sent to your email
+    </p>
+
+    <div class="info-box warning-box">
+        <strong>OTP Sent</strong><br>
+        Check the console/terminal for your OTP code.
+    </div>
+
+    <form method="POST" action="{{ url_for('login') }}">
+        <input type="hidden" name="step" value="2">
+
+        <div class="form-group">
+            <label for="otp">Enter 6-digit OTP</label>
+            <input type="text" id="otp" name="otp" maxlength="6" pattern="\d{6}" required autofocus
+                style="text-align: center; font-size: 24px; letter-spacing: 10px;">
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Verify & Login</button>
+    </form>
+    {% endif %}
+
+    <div class="info-box">
+        <h3 style="font-size: 16px; margin-bottom: 10px;">Security Features</h3>
+        <ul style="list-style: none; padding: 0; font-size: 14px;">
+            <li>• SHA-256 Password Hashing with Salt</li>
+            <li>• Multi-Factor Authentication (OTP)</li>
+            <li>• Role-Based Access Control</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

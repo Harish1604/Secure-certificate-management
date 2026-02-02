@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Request Certificate{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <h1>Request Certificate</h1>
+
+    <form method="POST" action="{{ url_for('request_certificate') }}">
+        <div class="form-group">
+            <label for="certificate_type">Certificate Type</label>
+            <select id="certificate_type" name="certificate_type" required>
+                <option value="">-- Select Certificate Type --</option>
+                <option value="Course Completion">Course Completion</option>
+                <option value="Degree Certificate">Degree Certificate</option>
+                <option value="Internship Certificate">Internship Certificate</option>
+                <option value="Achievement Certificate">Achievement Certificate</option>
+                <option value="Participation Certificate">Participation Certificate</option>
+            </select>
+        </div>
+
+        <div class="info-box">
+            <strong>What happens next?</strong>
+            <ol>
+                <li>Your request will be submitted to the admin</li>
+                <li>Admin will review and approve your request</li>
+                <li>Admin will upload and encrypt your certificate</li>
+                <li>You'll receive your securely encrypted certificate</li>
+            </ol>
+        </div>
+
+        <button type="submit" class="btn" style="width: 100%;">Submit Request</button>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary"
+            style="width: 100%; margin-top: 10px; text-align: center;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

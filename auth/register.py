@@ -23,6 +23,7 @@ def register_user(username, password, email, role='student'):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     
+    
     try:
         cursor.execute('''
             INSERT INTO users (username, password_hash, salt, role, email)

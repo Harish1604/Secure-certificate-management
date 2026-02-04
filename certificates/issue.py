@@ -122,3 +122,30 @@ def get_certificate_by_id(certificate_id):
             'certificate_type': result[6]
         }
     return None
+
+
+def get_all_certificates():
+    """Get all issued certificates with owner details (For Admin)"""
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        SELECT c.id, cr.certificate_type, c.issued_at, u.username
+        FROM certificates c
+        JOIN certificate_requests cr ON c.request_id = cr.id
+        JOIN users u ON c.owner_id = u.id
+        ORDER BY c.issued_at DESC
+    ''')
+    
+    certs = cursor.fetchall()
+    conn.close()
+    
+    return [
+        {
+            'id': c[0],
+            'certificate_type': c[1],
+            'issued_at': c[2],
+            'owner': c[3]
+        }
+        for c in certs
+    ]

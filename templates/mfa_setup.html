@@ -1,32 +1,33 @@
 {% extends "base.html" %}
 
-{% block title %}MFA Setup{% endblock %}
+{% block title %}Setup MFA{% endblock %}
 
-{% block content %}
-<div class="card" style="max-width: 500px; margin: 40px auto; text-align: center;">
-    <h1>Setup MFA</h1>
-    <p style="margin-bottom: 20px;">
-        To secure your account, please set up two-factor authentication using Google Authenticator or any TOTP app.
-    </p>
+{% block auth_content %}
+<div class="auth-card" style="max-width: 500px;">
+    <h2 style="margin-bottom: 24px; font-size: 1.5rem;">Secure Your Account</h2>
+    <p style="margin-bottom: 32px;">Scan the QR code below with your authenticator app (Google Authenticator, Authy,
+        etc.).</p>
 
-    <div class="info-box" style="margin-bottom: 30px; background: white; padding: 20px; display: inline-block;">
-        <img src="{{ qr_code }}" alt="MFA QR Code" style="width: 200px; height: 200px;">
+    <div style="background: white; padding: 16px; border-radius: 8px; display: inline-block; margin-bottom: 24px;">
+        <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code"
+            style="width: 200px; height: 200px; display: block;">
     </div>
 
-    <p style="margin-bottom: 20px; font-size: 14px;">
-        Can't scan the code? Enter this secret manually:<br>
-        <code
-            style="background: var(--input-bg); padding: 4px 8px; border-radius: 4px; color: var(--accent);">{{ secret }}</code>
-    </p>
+    <div
+        style="background-color: var(--bg-input); padding: 12px; border-radius: var(--radius-md); margin-bottom: 32px; font-family: monospace; font-size: 0.9rem; word-break: break-all;">
+        <span style="color: var(--text-muted); display: block; margin-bottom: 4px; font-size: 0.75rem;">SECRET
+            KEY</span>
+        {{ secret }}
+    </div>
 
     <form method="POST" action="{{ url_for('setup_mfa_verify') }}">
-        <div class="form-group">
-            <label for="code">Enter Verification Code</label>
-            <input type="text" id="code" name="code" placeholder="Enter 6-digit code" required
-                style="text-align: center; font-size: 18px; letter-spacing: 2px;" autocomplete="off">
+        <div class="form-group" style="text-align: left;">
+            <label for="code">Enter Confirmation Code</label>
+            <input type="text" id="code" name="code" required placeholder="000000"
+                style="text-align: center; font-size: 1.125rem; letter-spacing: 0.1em;">
         </div>
 
-        <button type="submit" class="btn" style="width: 100%;">Verify & Enable MFA</button>
+        <button type="submit" class="btn" style="width: 100%; padding: 12px;">Verify & Enable MFA</button>
     </form>
 </div>
 {% endblock %}

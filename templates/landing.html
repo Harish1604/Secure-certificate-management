@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block public_layout %}
+<div style="min-height: 100vh; display: flex; flex-direction: column;">
+    <!-- Navbar -->
+    <nav
+        style="padding: 20px 48px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);">
+        <div class="brand-logo" style="font-size: 1.25rem;">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+            SecureCert
+        </div>
+        <div>
+            <a href="{{ url_for('login') }}" class="btn">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header
+        style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 20px;">
+        <h1 style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 24px; max-width: 800px;">
+            Secure. Verifiable. <span style="color: var(--primary);">Trusted.</span>
+        </h1>
+        <p style="font-size: 1.25rem; color: var(--text-secondary); max-width: 600px; margin-bottom: 40px;">
+            The enterprise standard for digital certificate issuance and verification.
+            Powered by AES encryption and RSA digital signatures.
+        </p>
+        <div>
+            <a href="{{ url_for('login') }}" class="btn" style="padding: 14px 32px; font-size: 1rem;">Get Started</a>
+        </div>
+    </header>
+
+    <!-- Features -->
+    <section style="padding: 60px 48px; border-top: 1px solid var(--border); background-color: var(--bg-card);">
+        <div class="grid grid-3" style="max-width: 1200px; margin: 0 auto;">
+            <div style="padding: 24px;">
+                <div
+                    style="width: 48px; height: 48px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--primary);">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                </div>
+                <h3>AES Encryption</h3>
+                <p>Military-grade AES-256 encryption ensures your documents are secure and accessible only to authorized
+                    personnel.</p>
+            </div>
+            <div style="padding: 24px;">
+                <div
+                    style="width: 48px; height: 48px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--success);">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3>Digital Signatures</h3>
+                <p>RSA digital signatures guarantee authenticity and integrity, making every certificate tamper-proof
+                    and verifiable.</p>
+            </div>
+            <div style="padding: 24px;">
+                <div
+                    style="width: 48px; height: 48px; background: rgba(245, 158, 11, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--warning);">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                </div>
+                <h3>Instant Verification</h3>
+                <p>Third-party verifiers can instantly validate certificates against our public ledger without
+                    compromising privacy.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+        style="padding: 24px; text-align: center; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.875rem;">
+        &copy; 2026 SecureCert Systems. Enterprise Grade Security.
+    </footer>
+</div>
+{% endblock %}

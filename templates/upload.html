@@ -1,40 +1,66 @@
 {% extends "base.html" %}
 
 {% block title %}Upload Certificate{% endblock %}
+{% block page_title %}Issue Certificate{% endblock %}
 
 {% block content %}
-<div class="card" style="max-width: 700px; margin: 0 auto;">
-    <h1>Upload & Encrypt Certificate</h1>
+<div class="grid grid-2">
+    <div class="card">
+        <h2 style="margin-bottom: 24px;">Upload & Encrypt</h2>
+        <p style="margin-bottom: 20px;">
+            Issuing for Request #{{ request.id }}<br>
+            <span style="color: var(--text-muted);">Type: {{ request.certificate_type }}</span>
+        </p>
 
-    <div style="background: #f8f9fa; padding: 20px; border-radius: 5px; margin-bottom: 20px;">
-        <h3 style="margin-bottom: 10px;">Request Details</h3>
-        <p><strong>Request ID:</strong> #{{ request.id }}</p>
-        <p><strong>Student:</strong> {{ request.student }}</p>
-        <p><strong>Certificate Type:</strong> {{ request.certificate_type }}</p>
-        <p><strong>Status:</strong> <span class="security-badge valid">{{ request.status }}</span></p>
+        <form method="POST" enctype="multipart/form-data"
+            action="{{ url_for('upload_certificate', request_id=request.id) }}">
+            <div class="form-group">
+                <label for="certificate_file">Select PDF File</label>
+                <div style="border: 2px dashed var(--border); padding: 32px; text-align: center; border-radius: var(--radius-lg); cursor: pointer; transition: border-color 0.2s;"
+                    onclick="document.getElementById('certificate_file').click()">
+                    <svg width="40" height="40" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        style="margin: 0 auto 12px; color: var(--text-muted);">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <p style="color: var(--text-main); font-weight: 500;">Click to upload file</p>
+                    <p style="font-size: 0.85rem; color: var(--text-secondary);">PDF up to 5MB</p>
+                    <input type="file" id="certificate_file" name="certificate_file" accept=".pdf" required
+                        style="display: none;"
+                        onchange="document.getElementById('file-name').innerText = this.files[0].name">
+                </div>
+                <p id="file-name"
+                    style="margin-top: 8px; font-size: 0.9rem; color: var(--primary); text-align: center;"></p>
+            </div>
+
+            <div style="margin-top: 32px; display: flex; justify-content: flex-end; gap: 12px;">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-success">Encrypt & Issue</button>
+            </div>
+        </form>
     </div>
 
-    <form method="POST" action="{{ url_for('upload_certificate', request_id=request.id) }}"
-        enctype="multipart/form-data">
-        <div class="form-group">
-            <label for="certificate_file">Upload Certificate (PDF)</label>
-            <input type="file" id="certificate_file" name="certificate_file" accept=".pdf" required>
-        </div>
+    <div class="card">
+        <h3>Security Process</h3>
+        <p>When you click "Encrypt & Issue", the system will perform the following operations locally:</p>
 
-        <div class="info-box warning-box">
-            <strong>Security Process</strong>
-            <ol>
-                <li><strong>AES Encryption:</strong> Certificate will be encrypted with random 256-bit AES key</li>
-                <li><strong>RSA Key Exchange:</strong> AES key will be encrypted with RSA public key</li>
-                <li><strong>SHA-256 Hashing:</strong> Encrypted file will be hashed</li>
-                <li><strong>Digital Signature:</strong> Hash will be signed with RSA private key</li>
-                <li><strong>Base64 Encoding:</strong> Keys and signatures will be encoded for storage</li>
-            </ol>
-        </div>
+        <div style="margin-top: 24px;">
+            <div style="margin-bottom: 20px;">
+                <h4 style="font-size: 1rem; color: var(--primary);">1. AES-256 Encryption</h4>
+                <p style="font-size: 0.85rem;">The file is encrypted with a unique symmetric key.</p>
+            </div>
 
-        <button type="submit" class="btn" style="width: 100%;">Encrypt & Issue Certificate</button>
-        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary"
-            style="width: 100%; margin-top: 10px; text-align: center;">Cancel</a>
-    </form>
+            <div style="margin-bottom: 20px;">
+                <h4 style="font-size: 1rem; color: var(--primary);">2. RSA Key Encapsulation</h4>
+                <p style="font-size: 0.85rem;">The AES key is encrypted using the Public Key infrastructure.</p>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <h4 style="font-size: 1rem; color: var(--primary);">3. Digital Signature</h4>
+                <p style="font-size: 0.85rem;">A hash of the document is signed with the Private Key to prove issuer
+                    authenticity.</p>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

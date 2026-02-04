@@ -1,99 +1,106 @@
 {% extends "base.html" %}
 
 {% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h1>Welcome, {{ session.username }}!</h1>
-    <p style="color: #666;">Role: <strong>{{ session.role|upper }}</strong></p>
+<div class="card" style="border-left: 4px solid var(--primary); padding: 20px;">
+    <h2 style="border: none; margin: 0; padding: 0; font-size: 1.25rem;">Welcome back, {{ session.username }}</h2>
+    <p style="margin: 4px 0 0 0; font-size: 0.9rem;">Logged in as <strong style="text-transform: uppercase;">{{
+            session.role }}</strong></p>
 </div>
 
 {% if session.role == 'student' %}
 <!-- STUDENT DASHBOARD -->
-<div class="card">
-    <h2>My Certificate Requests</h2>
-    <a href="{{ url_for('request_certificate') }}" class="btn">New Certificate Request</a>
+<div class="grid grid-2">
+    <div class="card">
+        <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--divider); padding-bottom: 12px;">
+            <h2 style="border: none; margin: 0; padding: 0;">My Requests</h2>
+            <a href="{{ url_for('request_certificate') }}" class="btn btn-sm">New Request</a>
+        </div>
 
-    {% if data.requests %}
-    <table>
-        <thead>
-            <tr>
-                <th>Request ID</th>
-                <th>Certificate Type</th>
-                <th>Status</th>
-                <th>Requested On</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for req in data.requests %}
-            <tr>
-                <td>#{{ req.id }}</td>
-                <td>{{ req.certificate_type }}</td>
-                <td>
-                    {% if req.status == 'Approved' %}
-                    <span class="security-badge valid">{{ req.status }}</span>
-                    {% else %}
-                    <span class="security-badge" style="background: #ffc107; color: #000;">{{ req.status }}</span>
-                    {% endif %}
-                </td>
-                <td>{{ req.created_at }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <p style="color: #666; margin-top: 20px;">No requests yet. Create your first request!</p>
-    {% endif %}
-</div>
+        {% if data.requests %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for req in data.requests %}
+                <tr>
+                    <td>#{{ req.id }}</td>
+                    <td>{{ req.certificate_type }}</td>
+                    <td>
+                        {% if req.status == 'Approved' %}
+                        <span class="badge badge-success">Approved</span>
+                        {% else %}
+                        <span class="badge badge-warning">Pending</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ req.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No requests yet.</p>
+        {% endif %}
+    </div>
 
-<div class="card">
-    <h2>My Certificates</h2>
-    {% if data.certificates %}
-    <table>
-        <thead>
-            <tr>
-                <th>Certificate ID</th>
-                <th>Type</th>
-                <th>Issued On</th>
-                <th>Security</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for cert in data.certificates %}
-            <tr>
-                <td>#{{ cert.id }}</td>
-                <td>{{ cert.certificate_type }}</td>
-                <td>{{ cert.issued_at }}</td>
-                <td>
-                    <span class="security-badge encrypted">AES Encrypted</span>
-                    <span class="security-badge signed">RSA Signed</span>
-                </td>
-                <td>
-                    <a href="{{ url_for('download_certificate', certificate_id=cert.id) }}"
-                        class="btn btn-success">Download</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% else %}
-    <p style="color: #666; margin-top: 20px;">No certificates issued yet.</p>
-    {% endif %}
+    <div class="card">
+        <div style="margin-bottom: 16px; border-bottom: 1px solid var(--divider); padding-bottom: 12px;">
+            <h2 style="border: none; margin: 0; padding: 0;">My Certificates</h2>
+        </div>
+
+        {% if data.certificates %}
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Security</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cert in data.certificates %}
+                <tr>
+                    <td>#{{ cert.id }}</td>
+                    <td>{{ cert.certificate_type }}</td>
+                    <td>
+                        <span class="badge badge-blue">AES+RSA</span>
+                    </td>
+                    <td>
+                        <a href="{{ url_for('download_certificate', certificate_id=cert.id) }}"
+                            class="btn btn-sm btn-success">Download</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No certificates issued yet.</p>
+        {% endif %}
+    </div>
 </div>
 
 {% elif session.role == 'admin' %}
 <!-- ADMIN DASHBOARD -->
 <div class="card">
-    <h2>Pending Certificate Requests</h2>
+    <h2 style="margin-bottom: 16px;">Pending Requests</h2>
     {% if data.pending_requests %}
     <table>
         <thead>
             <tr>
-                <th>Request ID</th>
+                <th>Req ID</th>
                 <th>Student</th>
-                <th>Certificate Type</th>
-                <th>Requested On</th>
+                <th>Type</th>
+                <th>Date</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -105,9 +112,8 @@
                 <td>{{ req.certificate_type }}</td>
                 <td>{{ req.created_at }}</td>
                 <td>
-                    <form method="POST" action="{{ url_for('approve_certificate_request', request_id=req.id) }}"
-                        style="display: inline;">
-                        <button type="submit" class="btn btn-success">Approve & Upload</button>
+                    <form method="POST" action="{{ url_for('approve_certificate_request', request_id=req.id) }}">
+                        <button type="submit" class="btn btn-sm btn-success">Approve</button>
                     </form>
                 </td>
             </tr>
@@ -115,31 +121,100 @@
         </tbody>
     </table>
     {% else %}
-    <p style="color: #666; margin-top: 20px;">No pending requests.</p>
+    <p>No pending requests.</p>
     {% endif %}
 </div>
 
-
+<div class="card">
+    <h2 style="margin-bottom: 16px;">Issued Certificates Registry</h2>
+    {% if data.certificates %}
+    <table>
+        <thead>
+            <tr>
+                <th>Cert ID</th>
+                <th>Issued To</th>
+                <th>Type</th>
+                <th>Issued Date</th>
+                <th>Security</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cert in data.certificates %}
+            <tr>
+                <td>#{{ cert.id }}</td>
+                <td><strong>{{ cert.owner }}</strong></td>
+                <td>{{ cert.certificate_type }}</td>
+                <td>{{ cert.issued_at }}</td>
+                <td>
+                    <span class="badge badge-blue">Encrypted & Signed</span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No certificates issued yet.</p>
+    {% endif %}
+</div>
 
 {% elif session.role == 'verifier' %}
 <!-- VERIFIER DASHBOARD -->
 <div class="card">
-    <h2>Certificate Verification</h2>
-    <p style="color: #666; margin-bottom: 20px;">
-        As a verifier, you can independently verify the authenticity of any certificate.
-    </p>
-    <a href="{{ url_for('verify') }}" class="btn">Verify Certificate</a>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+        <h2 style="border: none; margin: 0;">Certificates Registry</h2>
+        <a href="{{ url_for('verify') }}" class="btn">Verify Manually</a>
+    </div>
+    <p style="margin-bottom: 24px;">Browse public certificates or verify a specific ID.</p>
+
+    {% if data.certificates %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Issued To</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cert in data.certificates %}
+            <tr>
+                <td>#{{ cert.id }}</td>
+                <td>{{ cert.owner }}</td>
+                <td>{{ cert.certificate_type }}</td>
+                <td>{{ cert.issued_at }}</td>
+                <td>
+                    <a href="{{ url_for('verify', certificate_id=cert.id) }}"
+                        class="btn btn-sm btn-secondary">Verify</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No certificates found.</p>
+    {% endif %}
 </div>
 
 <div class="card">
-    <h3>Verification Process</h3>
-    <ol style="color: #666; line-height: 2;">
-        <li>Decrypt AES key using RSA private key</li>
-        <li>Decrypt certificate file using AES key</li>
-        <li>Recalculate SHA-256 hash of encrypted file</li>
-        <li>Verify digital signature using RSA public key</li>
-        <li>Display VALID or TAMPERED status</li>
-    </ol>
+    <h3>Verification Protocol</h3>
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+        <div style="flex: 1; padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+            <h4 style="font-size: 1rem; color: var(--primary);">1. Decryption</h4>
+            <p style="font-size: 0.85rem; margin: 0;">System attempts to decrypt the AES key using the RSA private key.
+            </p>
+        </div>
+        <div style="flex: 1; padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+            <h4 style="font-size: 1rem; color: var(--primary);">2. Hash Check</h4>
+            <p style="font-size: 0.85rem; margin: 0;">Recalculates SHA-256 hash of the content to ensure data integrity.
+            </p>
+        </div>
+        <div style="flex: 1; padding: 16px; background: rgba(255,255,255,0.03); border-radius: 8px;">
+            <h4 style="font-size: 1rem; color: var(--primary);">3. Signature</h4>
+            <p style="font-size: 0.85rem; margin: 0;">Validates the digital signature against the public key.</p>
+        </div>
+    </div>
 </div>
 {% endif %}
 {% endblock %}

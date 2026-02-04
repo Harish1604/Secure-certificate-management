@@ -15,7 +15,7 @@ from requests.manage_requests import (
     create_request, get_pending_requests, get_user_requests, 
     approve_request, get_request_by_id
 )
-from certificates.issue import issue_certificate, get_user_certificates, get_certificate_by_id
+from certificates.issue import issue_certificate, get_user_certificates, get_certificate_by_id, get_all_certificates
 from certificates.verify import verify_certificate_by_id
 from crypto.signature import generate_rsa_keypair
 
@@ -107,10 +107,10 @@ from auth.totp_utils import generate_totp_secret, get_provisioning_uri, generate
 
 @app.route('/')
 def index():
-    """Redirect to login or dashboard"""
+    """Landing Page"""
     if 'user_id' in session:
         return redirect(url_for('dashboard'))
-    return redirect(url_for('login'))
+    return render_template('landing.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -264,7 +264,11 @@ def dashboard():
     elif role == 'admin':
         # Get pending requests
         data['pending_requests'] = get_pending_requests()
-        data['certificates'] = get_user_certificates(user_id)
+        data['certificates'] = get_all_certificates()
+    
+    elif role == 'verifier':
+        # Get all certificates for verification list
+        data['certificates'] = get_all_certificates()
     
     return render_template('dashboard.html', role=role, data=data)
 

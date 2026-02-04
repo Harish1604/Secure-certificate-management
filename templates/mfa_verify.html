@@ -1,26 +1,32 @@
 {% extends "base.html" %}
 
-{% block title %}Verify MFA{% endblock %}
+{% block title %}Verify Login{% endblock %}
 
-{% block content %}
-<div class="card" style="max-width: 400px; margin: 40px auto; text-align: center;">
-    <h1>Authentication Required</h1>
-    <p style="margin-bottom: 30px;">
-        Please enter the code from your authenticator app.
-    </p>
+{% block auth_content %}
+<div class="auth-card">
+    <div style="margin-bottom: 24px;">
+        <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+            style="color: var(--primary);">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+        </svg>
+    </div>
 
-    <form method="POST" action="{{ url_for('verify_mfa_login') }}">
-        <div class="form-group">
-            <label for="code">Enter TOTP Code</label>
-            <input type="text" id="code" name="code" placeholder="000 000" required
-                style="text-align: center; font-size: 24px; letter-spacing: 4px;" autocomplete="off" autofocus>
+    <h2 style="margin-bottom: 12px; font-size: 1.5rem;">Two-Factor Authentication</h2>
+    <p>Please enter the verification code from your authenticator app.</p>
+
+    <form method="POST" action="{{ url_for('verify_mfa_login') }}" style="margin-top: 24px;">
+        <div class="form-group" style="text-align: left;">
+            <label for="code">Verification Code</label>
+            <input type="text" id="code" name="code" required autofocus placeholder="123456"
+                style="text-align: center; font-size: 1.25rem; letter-spacing: 0.25em;">
         </div>
 
-        <button type="submit" class="btn" style="width: 100%;">Verify Login</button>
+        <button type="submit" class="btn" style="width: 100%; padding: 12px;">Verify</button>
     </form>
 
-    <div style="margin-top: 20px;">
-        <a href="{{ url_for('logout') }}" style="color: var(--text-muted); font-size: 14px;">Back to Login</a>
-    </div>
+    <p style="margin-top: 24px; font-size: 0.9rem;">
+        <a href="{{ url_for('login') }}" style="color: var(--text-muted);">Back to Login</a>
+    </p>
 </div>
 {% endblock %}

@@ -104,4 +104,16 @@ def verify_certificate_by_id(certificate_id, private_key_path, public_key_path):
             'message': 'ERROR - Certificate not found'
         }
     
-    return verify_certificate(cert_data, private_key_path, public_key_path)
+    result = verify_certificate(cert_data, private_key_path, public_key_path)
+    
+    # Enrich result with certificate metadata
+    result['owner_id'] = cert_data.get('owner_id')
+    result['certificate_id'] = cert_data.get('id')
+    
+    # Flatten crypto details for easier template access
+    if 'crypto_details' in result:
+        result['encrypted_key'] = result['crypto_details']['encrypted_key_b64']
+        result['digital_signature'] = result['crypto_details']['signature_b64']
+        result['file_hash'] = result['crypto_details']['stored_hash']
+        
+    return result

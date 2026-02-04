@@ -11,6 +11,15 @@
         </svg>
         SecureCert
     </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     <h2 style="margin-bottom: 24px; font-size: 1.5rem;">Sign in to your account</h2>
 
     <form method="POST" action="{{ url_for('login') }}">

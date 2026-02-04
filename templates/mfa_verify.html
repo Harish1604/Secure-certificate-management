@@ -15,6 +15,14 @@
     <h2 style="margin-bottom: 12px; font-size: 1.5rem;">Two-Factor Authentication</h2>
     <p>Please enter the verification code from your authenticator app.</p>
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}" style="text-align: left;">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     <form method="POST" action="{{ url_for('verify_mfa_login') }}" style="margin-top: 24px;">
         <div class="form-group" style="text-align: left;">
             <label for="code">Verification Code</label>

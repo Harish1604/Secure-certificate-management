@@ -147,9 +147,12 @@ def setup_2fa():
     if 'temp_user_id' not in session:
         return redirect(url_for('login'))
         
-    # Generate new secret
-    secret = generate_totp_secret()
-    session['new_totp_secret'] = secret
+    # Generate new secret if not exists
+    if 'new_totp_secret' not in session:
+        secret = generate_totp_secret()
+        session['new_totp_secret'] = secret
+    else:
+        secret = session['new_totp_secret']
     
     # Generate QR Code
     username = session.get('temp_username', 'User')

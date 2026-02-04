@@ -11,6 +11,15 @@
         </svg>
         SecureCert
     </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     <h2 style="margin-bottom: 24px; font-size: 1.5rem;">Create a new account</h2>
 
     <form method="POST" action="{{ url_for('register') }}">
@@ -36,6 +45,7 @@
             <label for="role">Role</label>
             <select id="role" name="role" required>
                 <option value="student">Student</option>
+                <option value="admin">Admin</option>
                 <option value="verifier">Verifier</option>
             </select>
         </div>

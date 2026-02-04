@@ -9,8 +9,7 @@
         etc.).</p>
 
     <div style="background: white; padding: 16px; border-radius: 8px; display: inline-block; margin-bottom: 24px;">
-        <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code"
-            style="width: 200px; height: 200px; display: block;">
+        <img src="{{ qr_code }}" alt="QR Code" style="width: 200px; height: 200px; display: block;">
     </div>
 
     <div
@@ -19,6 +18,16 @@
             KEY</span>
         {{ secret }}
     </div>
+
+
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }}" style="text-align: left;">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
 
     <form method="POST" action="{{ url_for('setup_mfa_verify') }}">
         <div class="form-group" style="text-align: left;">

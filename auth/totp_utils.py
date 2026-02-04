@@ -43,4 +43,4 @@ def verify_totp(secret, code):
     if not secret:
         return False
     totp = pyotp.TOTP(secret)
-    return totp.verify(code)
+    return totp.verify(code, valid_window=1)

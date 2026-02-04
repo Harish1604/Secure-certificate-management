@@ -5,6 +5,7 @@ import sqlite3
 from crypto.hash_utils import generate_salt, hash_password
 
 
+
 def register_user(username, password, email, role='student'):
     """
     Register a new user with hashed password

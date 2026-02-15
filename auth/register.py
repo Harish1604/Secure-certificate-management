@@ -9,8 +9,11 @@ from crypto.hash_utils import generate_salt, hash_password
 def register_user(username, password, email, role='student'):
     """
     Register a new user with hashed password
-    role: 'student', 'admin', or 'verifier'
+    role: '
+    student', 'admin', or 'verifier'
     """
+
+    
     # Validate role
     if role not in ['student', 'admin', 'verifier']:
         raise ValueError("Invalid role. Must be 'student', 'admin', or 'verifier'")

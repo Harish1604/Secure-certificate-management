@@ -11,8 +11,7 @@ def authenticate_user(username, password):
     Returns user dict if successful, None otherwise
     """
     user = get_user_by_username(username)
-    
-    
+        
     if not user:
         return None
     

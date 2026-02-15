@@ -20,6 +20,7 @@ def register_user(username, password, email, role='student'):
     salt = generate_salt()
     password_hash = hash_password(password, salt)
     
+    
     # Insert into database
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()

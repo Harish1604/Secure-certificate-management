@@ -12,6 +12,7 @@ def authenticate_user(username, password):
     """
     user = get_user_by_username(username)
     
+    
     if not user:
         return None
     

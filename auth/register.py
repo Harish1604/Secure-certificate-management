@@ -12,8 +12,6 @@ def register_user(username, password, email, role='student'):
     role: '
     student', 'admin', or 'verifier'
     """
-
-    
     # Validate role
     if role not in ['student', 'admin', 'verifier']:
         raise ValueError("Invalid role. Must be 'student', 'admin', or 'verifier'")
